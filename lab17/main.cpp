@@ -4,58 +4,59 @@
 #include "point.h"
 
 int main() {
-	Matrix<Point>* mp = new Matrix<Point>(2, 2);
-	Matrix<Point>* mp1 = new Matrix<Point>(2, 2);
-	Matrix<Point>* sp = NULL;
-	Matrix<int>* m = new Matrix<int>(3, 4);
-	Matrix<int>* m1 = new Matrix<int>(3, 4);
-	Matrix<int>* s = NULL;
+	Matrix<Point> mp(2, 2);
+	Matrix<Point> mp1(2, 2);
+	Matrix<Point> sp;
+	Matrix<int> m(3, 4);
+	Matrix<int> m1(3, 4);
+	Matrix<int> s;
 	try {
 		std::cout << "Int example\n";
 		int k = 1, l = 1;
-		for (int i = 0; i < m->rows(); i++) {
-			for (int j = 0; j < m->columns(); j++) {
-				m->set(k, i, j); 
+		for (int i = 0; i < m.rows(); i++) {
+			for (int j = 0; j < m.columns(); j++) {
+				m.set(k, i, j); 
 				k++;
 			}
 		}
-		m->print();
+		m.print();
 		std::cout << '+' << '\n';
 
-		for (int i = 0; i < m1->rows(); i++) {
-			for (int j = 0; j < m1->columns(); j++) {
-				m1->set(l * l, i, j); 
+		for (int i = 0; i < m1.rows(); i++) {
+			for (int j = 0; j < m1.columns(); j++) {
+				m1.set(l * l, i, j); 
 				l++;
 			}
 		}
-		m1->print();
+		m1.print();
 		std::cout << '=' << '\n';
-		s = m->sum(m1);
-		s->print();
-
+		s = m.sum(m1);
+		s.print();
+		
 		std::cout << "\nPoint example\n";
 		int x = 1, y = 2, z = 3, x1 = 1, y1 = 2, z1 = 3;
-		for (int i = 0; i < mp->rows(); i++) {
-			for (int j = 0; j < mp->columns(); j++) {
+		for (int i = 0; i < mp.rows(); i++) {
+			for (int j = 0; j < mp.columns(); j++) {
 				Point p(x, y, z);
-				mp->set(p, i, j);
+				mp.set(p, i, j);
 				x++; y++; z++;
 			}
 		}
-		mp->print();
+		mp.print();
 		std::cout << '+' << '\n';
-		for (int i = 0; i < mp1->rows(); i++) {
-			for (int j = 0; j < mp1->columns(); j++) {
+		for (int i = 0; i < mp1.rows(); i++) {
+			for (int j = 0; j < mp1.columns(); j++) {
 				Point p1(x1 * x1, y1 * y1, z1 * z1);
-				mp1->set(p1, i, j);
+				mp1.set(p1, i, j);
 				x1++; y1++; z1++;
 			}
 		}
 
-		mp1->print();
+		mp1.print();
 		std::cout << '=' << '\n';
-		sp = mp->sum(mp1);
-		sp->print();
+		sp = mp.sum(mp1);
+		sp.print(); 
+		
 	}
 
 	catch (std::out_of_range& e) {
@@ -64,12 +65,6 @@ int main() {
 	catch (std::range_error& e) {
 		std::cerr << e.what() << std::endl;
 	}
-	delete m;
-	delete m1;
-	delete s; 
-	delete mp;
-	delete mp1;
-	delete sp;
-
+	
 	return 0;
 }

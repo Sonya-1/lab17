@@ -1,8 +1,7 @@
-#include <iostream>
-#include <stdexcept>
-
 #ifndef Point_H
 #define Point_H
+#include <iostream>
+#include <stdexcept>
 
 class Point {
 private:

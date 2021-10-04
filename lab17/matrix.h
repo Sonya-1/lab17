@@ -1,9 +1,8 @@
+#ifndef Matrix_H
+#define Matrix_H
 #include <iostream>
 #include <stdexcept>
 #include "point.h"
-
-#ifndef Matrix_H
-#define Matrix_H
 
 template <class T>
 class Matrix {
@@ -15,12 +14,12 @@ public:
 	Matrix();
 	Matrix(size_t row, size_t column);
 	Matrix(Matrix& mx);
-	Matrix* operator=(Matrix& mx);
-	void set(T val, size_t row, size_t column);
-	T get(size_t row, size_t column);
+	Matrix<T>& operator=(const Matrix<T>& mx);
+	void set(const T& val, size_t row, size_t column);
+	const T& get(size_t row, size_t column);
 	int rows() { return row; }
 	int columns() { return column; }
-	Matrix* sum(Matrix* m);
+	Matrix sum(Matrix& m);
 	void print();
 	~Matrix();
 };
@@ -57,18 +56,19 @@ Matrix<T>::Matrix(Matrix& mx) {
 }
 
 template <class T>
-Matrix<T>* Matrix<T>::operator=(Matrix& mx) {
+Matrix<T>& Matrix<T>::operator=(const Matrix<T>& mx) {
 	if (&mx == this) {
-		return this;
+		return *this;
 	}
+
 	for (size_t i = 0; i < row; i++) {
 		delete[] m[i];
 		m[i] = NULL;
 	}
-	delete[] * m;
+	delete[] m;// delete[] m
 	row = mx.row;
 	column = mx.column;
-	m = new T * [row];
+	m = new T* [row];
 	for (size_t i = 0; i < row; i++) {
 		m[i] = new T[column];
 	}
@@ -77,11 +77,12 @@ Matrix<T>* Matrix<T>::operator=(Matrix& mx) {
 			m[i][j] = mx.m[i][j];
 		}
 	}
-	return this;
+
+	return *this;
 }
 
 template <class T>
-void Matrix<T>::set(T val, size_t row, size_t column) {
+void Matrix<T>::set(const T& val, size_t row, size_t column) {
 	if (row >= this->row || column >= this->column) {
 		throw std::out_of_range("Set: value out of range");
 	}
@@ -89,7 +90,7 @@ void Matrix<T>::set(T val, size_t row, size_t column) {
 }
 
 template <class T>
-T Matrix<T>::get(size_t row, size_t column) {
+const T& Matrix<T>::get(size_t row, size_t column) {
 	if (row >= this->row || column >= this->column) {
 		throw std::out_of_range("Get: value out of range");
 	}
@@ -97,17 +98,17 @@ T Matrix<T>::get(size_t row, size_t column) {
 }
 
 template <class T>
-Matrix<T>* Matrix<T>::sum(Matrix* m) {
-	if (this->row != m->row || this->column != m->column) {
+Matrix<T> Matrix<T>::sum(Matrix& m) {
+	if (this->row != m.row || this->column != m.column) {
 		throw std::range_error("Sum: the addition can't be performed due to the wrong dimension of the matrixs");
 	}
 	T a, b;
-	Matrix* sum = new Matrix(row, column);
+	Matrix sum(row, column);
 	for (size_t i = 0; i < row; i++) {
 		for (size_t j = 0; j < column; j++) {
 			a = this->get(i, j);
-			b = m->get(i, j);
-			sum->set(a + b, i, j);
+			b = m.get(i, j);
+			sum.set(a + b, i, j);
 		}
 	}
 	return sum;
@@ -128,8 +129,9 @@ Matrix<T>::~Matrix<T>() {
 	for (size_t i = 0; i < row; i++) {
 		delete[] m[i];
 		m[i] = NULL;
+		std::cout << i << "~Del~\n";
 	}
-	delete[] * m;
+	delete[]* m;// delete[] m
 	*m = NULL;
 }
 
